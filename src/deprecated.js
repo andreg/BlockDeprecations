@@ -1,3 +1,27 @@
+const migrateToFirstName = (attributes) => {
+	let newAttrs = { ...attributes };
+
+	Object.assign(newAttrs, {
+		firstName: newAttrs.name,
+	});
+
+	const { name, ...otherAttrs } = newAttrs;
+
+	return otherAttrs;
+};
+
+const migrateToLastName = (attributes) => {
+	let newAttrs = { ...attributes };
+
+	Object.assign(newAttrs, {
+		lastName: newAttrs.surname,
+	});
+
+	const { surname, ...otherAttrs } = newAttrs;
+
+	return otherAttrs;
+};
+
 const v1 = {
 	attributes: {
 		name: {
@@ -8,18 +32,14 @@ const v1 = {
 		},
 	},
 	migrate(attributes) {
-		let newAttrs = { ...attributes };
+		console.log("v1");
+		attributes = migrateToFirstName(attributes);
+		attributes = migrateToLastName(attributes);
 
-		Object.assign(newAttrs, {
-			firstName: newAttrs.name,
-		});
-
-		const { name, ...otherAttrs } = newAttrs;
-
-		return otherAttrs;
+		return attributes;
 	},
 	isEligible(attributes) {
-		return attributes.name;
+		return !attributes.firstName;
 	},
 };
 
@@ -33,18 +53,14 @@ const v2 = {
 		},
 	},
 	migrate(attributes) {
-		let newAttrs = { ...attributes };
+		console.log("v2");
+		attributes = migrateToFirstName(attributes);
+		attributes = migrateToLastName(attributes);
 
-		Object.assign(newAttrs, {
-			lastName: newAttrs.surname,
-		});
-
-		const { surname, ...otherAttrs } = newAttrs;
-
-		return otherAttrs;
+		return attributes;
 	},
 	isEligible(attributes) {
-		return attributes.surname;
+		return !attributes.lastName;
 	},
 };
 
